@@ -9,7 +9,6 @@ import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.JavascriptExecutor;
 
 import java.time.Duration;
 import java.util.*;
@@ -19,26 +18,27 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class GroupDeleteTest {
     private WebDriver driver;
-    private Map<String, Object> vars;
-    JavascriptExecutor js;
+
+
     @BeforeEach
     public void setUp() {
         driver = new ChromeDriver();
-        js = (JavascriptExecutor) driver;
-        vars = new HashMap<String, Object>();
-    }
-    @AfterEach
-    public void tearDown() {
-        driver.quit();
-    }
-    @Test
-    public void groupDeleteTest() {
         driver.get("http://localhost/addressbook/index.php");
         driver.manage().window().setSize(new Dimension(1217, 743));
         driver.findElement(By.name("user")).sendKeys("admin");
         driver.findElement(By.name("pass")).click();
         driver.findElement(By.name("pass")).sendKeys("secret");
         driver.findElement(By.xpath("//input[@value=\'Login\']")).click();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        //driver.findElement(By.linkText("Logout")).click();
+        driver.quit();
+
+    }
+    @Test
+    public void canDeleteGroup() {
         driver.findElement(By.linkText("groups")).click();
         List<WebElement> checkboxesBefore = driver.findElements(By.name("selected[]"));
         int before = checkboxesBefore.size();
@@ -54,7 +54,5 @@ public class GroupDeleteTest {
         List<WebElement> checkboxesAfter = driver.findElements(By.name("selected[]"));
         int after = checkboxesAfter.size();
         assertEquals(before - 1, after);
-        driver.findElement(By.linkText("Logout")).click();
     }
 }
-
