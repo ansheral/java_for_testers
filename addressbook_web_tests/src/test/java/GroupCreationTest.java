@@ -57,9 +57,9 @@ public class GroupCreationTest {
     driver.findElement(By.name("group_footer")).click();
     driver.findElement(By.name("group_footer")).sendKeys("Footer1");
     driver.findElement(By.name("submit")).click();
-    //WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-    //wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
-    driver.findElement(By.linkText("group page")).click();
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
+    wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
+      // driver.findElement(By.linkText("group page")).click();
     driver.findElement(By.linkText("Logout")).click();
   }
 }
