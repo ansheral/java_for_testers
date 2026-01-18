@@ -1,3 +1,4 @@
+import model.GroupData1;
 import org.junit.jupiter.api.BeforeEach;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -11,15 +12,15 @@ import java.time.Duration;
 public class TestBase {
     protected static WebDriver driver;
 
-    protected static void CreateGroup(String x, String Header1, String Footer1) {
+    protected static void CreateGroup(GroupData1 group) {
         driver.findElement(By.name("new")).click();
         driver.findElement(By.id("content")).click();
         driver.findElement(By.name("group_name")).click();
-        driver.findElement(By.name("group_name")).sendKeys(x);
+        driver.findElement(By.name("group_name")).sendKeys(group.name());
         driver.findElement(By.name("group_header")).click();
-        driver.findElement(By.name("group_header")).sendKeys(Header1);
+        driver.findElement(By.name("group_header")).sendKeys(group.header());
         driver.findElement(By.name("group_footer")).click();
-        driver.findElement(By.name("group_footer")).sendKeys(Footer1);
+        driver.findElement(By.name("group_footer")).sendKeys(group.footer());
         driver.findElement(By.name("submit")).click();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
@@ -40,7 +41,7 @@ public class TestBase {
             driver.findElement(By.name("user")).sendKeys("admin");
             driver.findElement(By.name("pass")).click();
             driver.findElement(By.name("pass")).sendKeys("secret");
-            driver.findElement(By.xpath("//input[@value=\'Login\']")).click();
+            driver.findElement(By.xpath("//input[@value='Login']")).click();
         }
     }
 

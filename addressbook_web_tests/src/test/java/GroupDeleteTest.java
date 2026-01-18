@@ -1,3 +1,4 @@
+import model.GroupData1;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -29,7 +30,7 @@ public class GroupDeleteTest extends TestBase {
         OpenGroupsPage();
         List<WebElement> checkboxesBefore = driver.findElements(By.name("selected[]"));
         if (!isGroupPresent()) {
-            CreateGroup("New group 1", "Header1", "Footer1");
+            CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
         }
         RemoveGroup();
     }
