@@ -22,7 +22,7 @@ public class GroupDeleteTest extends TestBase {
         } else {
             throw new AssertionError("Группы отсутсвуют");
         }
-        app.RemoveGroup();
+        app.groups().RemoveGroup();
         List<WebElement> checkboxesAfter = ApplicationManager.driver.findElements(By.name("selected[]"));
         int after = checkboxesAfter.size();
         assertEquals(before - 1, after);
@@ -30,11 +30,10 @@ public class GroupDeleteTest extends TestBase {
 
     @Test
     public void canDeleteGroupWithCreation() {
-        app.OpenGroupsPage();
         List<WebElement> checkboxesBefore = ApplicationManager.driver.findElements(By.name("selected[]"));
-        if (!app.isGroupPresent()) {
-            app.CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
+        if (!app.groups().isGroupPresent(app)) {
+            app.groups().CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
         }
-        app.RemoveGroup();
+        app.groups().RemoveGroup();
     }
 }

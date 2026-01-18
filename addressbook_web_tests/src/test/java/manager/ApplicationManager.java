@@ -12,17 +12,29 @@ import java.time.Duration;
 
 public class ApplicationManager {
     public static WebDriver driver;
+    private LoginHelper session;
+    private GroupHelper groups;
 
     public void init() {
         if (driver == null) {
             driver = new ChromeDriver();
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.get("http://localhost/addressbook/index.php");
-            driver.findElement(By.name("user")).sendKeys("admin");
-            driver.findElement(By.name("pass")).click();
-            driver.findElement(By.name("pass")).sendKeys("secret");
-            driver.findElement(By.xpath("//input[@value='Login']")).click();
+            session().login("admin", "secret");
         }
+    }
+
+    public LoginHelper session() {
+        if (session == null){
+            session = new LoginHelper(this);
+        }
+        return session;
+    }
+    public GroupHelper groups(){
+        if (groups == null){
+            groups = new GroupHelper(this);
+        }
+        return groups;
     }
 
     public boolean isElementPresent(By locator) {
@@ -34,33 +46,4 @@ public class ApplicationManager {
         }
     }
 
-    public void CreateGroup(GroupData1 group) {
-        driver.findElement(By.name("new")).click();
-        driver.findElement(By.id("content")).click();
-        driver.findElement(By.name("group_name")).click();
-        driver.findElement(By.name("group_name")).sendKeys(group.name());
-        driver.findElement(By.name("group_header")).click();
-        driver.findElement(By.name("group_header")).sendKeys(group.header());
-        driver.findElement(By.name("group_footer")).click();
-        driver.findElement(By.name("group_footer")).sendKeys(group.footer());
-        driver.findElement(By.name("submit")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
-    }
-
-    public void OpenGroupsPage() {
-        if (!isElementPresent(By.name("new"))) {
-            driver.findElement(By.linkText("groups")).click();
-        }
-    }
-
-    public boolean isGroupPresent() {
-        return isElementPresent(By.name("selected[]"));
-    }
-
-    public void RemoveGroup() {
-        driver.findElement(By.name("delete")).click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
-    }
 }
