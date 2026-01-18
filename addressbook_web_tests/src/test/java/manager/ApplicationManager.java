@@ -1,23 +1,25 @@
 package manager;
 
-import model.GroupData1;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class ApplicationManager {
     public static WebDriver driver;
     private LoginHelper session;
     private GroupHelper groups;
 
-    public void init() {
+    public void init(String browser) {
         if (driver == null) {
-            driver = new ChromeDriver();
+            if ("Chrome".equals(browser)){
+                driver = new ChromeDriver();
+            } else if ("firefox".equals(browser)){
+                driver = new FirefoxDriver();
+            } else {
+                throw new IllegalArgumentException(String.format("Unknown Browser %s", browser));
+            }
             Runtime.getRuntime().addShutdownHook(new Thread(driver::quit));
             driver.get("http://localhost/addressbook/index.php");
             session().login("admin", "secret");

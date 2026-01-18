@@ -30,7 +30,6 @@ public class GroupDeleteTest extends TestBase {
 
     @Test
     public void canDeleteGroupWithCreation() {
-        List<WebElement> checkboxesBefore = ApplicationManager.driver.findElements(By.name("selected[]"));
         if (!app.groups().isGroupPresent(app)) {
             app.groups().CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
         }

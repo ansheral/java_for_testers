@@ -27,23 +27,66 @@ public class GroupHelper {
 
     public void CreateGroup(GroupData1 group) {
         OpenGroupsPage();
-        ApplicationManager.driver.findElement(By.name("new")).click();
+        initGroupCreation();
         ApplicationManager.driver.findElement(By.id("content")).click();
+        fillGroupForm(group);
+        submitGroupCreation();
+        returnToGroupsPage();
+    }
+
+    private static void submitGroupCreation() {
+        ApplicationManager.driver.findElement(By.name("submit")).click();
+    }
+
+    private static void initGroupCreation() {
+        ApplicationManager.driver.findElement(By.name("new")).click();
+    }
+
+    public void RemoveGroup() {
+        OpenGroupsPage();
+        selectGroup();
+        removeSelectedGroup();
+        returnToGroupsPage();
+    }
+
+    private static void removeSelectedGroup() {
+        ApplicationManager.driver.findElement(By.name("delete")).click();
+    }
+
+    public void modifyGroup(GroupData1 modifiedGroup) {
+        OpenGroupsPage();
+        selectGroup();
+        initGroupModification();
+        fillGroupForm(modifiedGroup);
+        submitGroupModification();
+        returnToGroupsPage();
+    }
+
+    private void returnToGroupsPage() {
+         WebDriverWait wait = new WebDriverWait(ApplicationManager.driver, Duration.ofSeconds(3));
+        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
+    }
+
+    private void submitGroupModification() {
+        ApplicationManager.driver.findElement(By.name("update")).click();
+    }
+
+    private void fillGroupForm(GroupData1 group) {
         ApplicationManager.driver.findElement(By.name("group_name")).click();
+        ApplicationManager.driver.findElement(By.name("group_name")).clear();
         ApplicationManager.driver.findElement(By.name("group_name")).sendKeys(group.name());
         ApplicationManager.driver.findElement(By.name("group_header")).click();
         ApplicationManager.driver.findElement(By.name("group_header")).sendKeys(group.header());
         ApplicationManager.driver.findElement(By.name("group_footer")).click();
         ApplicationManager.driver.findElement(By.name("group_footer")).sendKeys(group.footer());
-        ApplicationManager.driver.findElement(By.name("submit")).click();
-        WebDriverWait wait = new WebDriverWait(ApplicationManager.driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
     }
 
-    public void RemoveGroup() {
-        OpenGroupsPage();
-        ApplicationManager.driver.findElement(By.name("delete")).click();
-        WebDriverWait wait = new WebDriverWait(ApplicationManager.driver, Duration.ofSeconds(3));
-        wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
+    private void initGroupModification() {
+        ApplicationManager.driver.findElement(By.name("edit")).click();
     }
+
+    private void selectGroup() {
+        ApplicationManager.driver.findElement(By.name("selected[]")).click();
+    }
+
 }
