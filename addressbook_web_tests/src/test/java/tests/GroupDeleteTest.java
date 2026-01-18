@@ -1,3 +1,6 @@
+package tests;
+
+import manager.ApplicationManager;
 import model.GroupData1;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
@@ -11,27 +14,27 @@ public class GroupDeleteTest extends TestBase {
 
     @Test
     public void canDeleteGroup() {
-        driver.findElement(By.linkText("groups")).click();
-        List<WebElement> checkboxesBefore = driver.findElements(By.name("selected[]"));
+        ApplicationManager.driver.findElement(By.linkText("groups")).click();
+        List<WebElement> checkboxesBefore = ApplicationManager.driver.findElements(By.name("selected[]"));
         int before = checkboxesBefore.size();
         if (before > 0) {
             checkboxesBefore.get(0).click();
         } else {
             throw new AssertionError("Группы отсутсвуют");
         }
-        RemoveGroup();
-        List<WebElement> checkboxesAfter = driver.findElements(By.name("selected[]"));
+        app.RemoveGroup();
+        List<WebElement> checkboxesAfter = ApplicationManager.driver.findElements(By.name("selected[]"));
         int after = checkboxesAfter.size();
         assertEquals(before - 1, after);
     }
 
     @Test
     public void canDeleteGroupWithCreation() {
-        OpenGroupsPage();
-        List<WebElement> checkboxesBefore = driver.findElements(By.name("selected[]"));
-        if (!isGroupPresent()) {
-            CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
+        app.OpenGroupsPage();
+        List<WebElement> checkboxesBefore = ApplicationManager.driver.findElements(By.name("selected[]"));
+        if (!app.isGroupPresent()) {
+            app.CreateGroup(new GroupData1("New group 1", "Header1", "Footer1"));
         }
-        RemoveGroup();
+        app.RemoveGroup();
     }
 }
