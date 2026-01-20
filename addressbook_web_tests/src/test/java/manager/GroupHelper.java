@@ -7,39 +7,19 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 
-public class GroupHelper {
-        private final ApplicationManager manager;
+public class GroupHelper extends HelperBase{
 
     public GroupHelper(ApplicationManager manager){
-        this.manager = manager;
-    }
-
-    public void OpenGroupsPage() {
-        if (!manager.isElementPresent(By.name("new"))) {
-            ApplicationManager.driver.findElement(By.linkText("groups")).click();
-        }
-    }
-
-    public boolean isGroupPresent(ApplicationManager manager) {
-        OpenGroupsPage();
-        return manager.isElementPresent(By.name("selected[]"));
+        super(manager);
     }
 
     public void CreateGroup(GroupData1 group) {
         OpenGroupsPage();
         initGroupCreation();
-        ApplicationManager.driver.findElement(By.id("content")).click();
+        click(By.id("content"));
         fillGroupForm(group);
         submitGroupCreation();
         returnToGroupsPage();
-    }
-
-    private static void submitGroupCreation() {
-        ApplicationManager.driver.findElement(By.name("submit")).click();
-    }
-
-    private static void initGroupCreation() {
-        ApplicationManager.driver.findElement(By.name("new")).click();
     }
 
     public void RemoveGroup() {
@@ -47,10 +27,6 @@ public class GroupHelper {
         selectGroup();
         removeSelectedGroup();
         returnToGroupsPage();
-    }
-
-    private static void removeSelectedGroup() {
-        ApplicationManager.driver.findElement(By.name("delete")).click();
     }
 
     public void modifyGroup(GroupData1 modifiedGroup) {
@@ -62,31 +38,51 @@ public class GroupHelper {
         returnToGroupsPage();
     }
 
+    private void fillGroupForm(GroupData1 group) {
+        click(By.name("group_name"));
+        ApplicationManager.driver.findElement(By.name("group_name")).clear();
+        type(By.name("group_name"),group.name());
+        type(By.name("group_header"), group.header());
+        type(By.name("group_footer"), group.footer());
+    }
+
+    private void initGroupModification() {
+        click(By.name("edit"));
+    }
+
+    private void selectGroup() {
+        click(By.name("selected[]"));
+    }
+
+    public void OpenGroupsPage() {
+        if (!manager.isElementPresent(By.name("new"))) {
+            click(By.linkText("groups"));
+        }
+    }
+
+    public boolean isGroupPresent(ApplicationManager manager) {
+        OpenGroupsPage();
+        return manager.isElementPresent(By.name("selected[]"));
+    }
+
     private void returnToGroupsPage() {
-         WebDriverWait wait = new WebDriverWait(ApplicationManager.driver, Duration.ofSeconds(3));
+        WebDriverWait wait = new WebDriverWait(ApplicationManager.driver, Duration.ofSeconds(3));
         wait.until(ExpectedConditions.elementToBeClickable(By.linkText("group page"))).click();
     }
 
     private void submitGroupModification() {
-        ApplicationManager.driver.findElement(By.name("update")).click();
+        click(By.name("update"));
     }
 
-    private void fillGroupForm(GroupData1 group) {
-        ApplicationManager.driver.findElement(By.name("group_name")).click();
-        ApplicationManager.driver.findElement(By.name("group_name")).clear();
-        ApplicationManager.driver.findElement(By.name("group_name")).sendKeys(group.name());
-        ApplicationManager.driver.findElement(By.name("group_header")).click();
-        ApplicationManager.driver.findElement(By.name("group_header")).sendKeys(group.header());
-        ApplicationManager.driver.findElement(By.name("group_footer")).click();
-        ApplicationManager.driver.findElement(By.name("group_footer")).sendKeys(group.footer());
+    private void submitGroupCreation() {
+        click(By.name("submit"));
     }
 
-    private void initGroupModification() {
-        ApplicationManager.driver.findElement(By.name("edit")).click();
-    }
+    private void initGroupCreation() {
 
-    private void selectGroup() {
-        ApplicationManager.driver.findElement(By.name("selected[]")).click();
+        click(By.name("new"));
     }
-
+    private void removeSelectedGroup() {
+        click(By.name("delete"));
+    }
 }
